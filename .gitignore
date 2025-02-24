@@ -163,3 +163,4 @@ cython_debug/
 
 #visual code
 .vscode
+.env.env
