@@ -7,6 +7,9 @@ import os
 load_dotenv()
 
 def get_bbc_news():
+    """"
+    This function fetches the BBC News dataset from BigQuery and returns it as a DataFrame.
+    """
     # Setting up the credentials
     project = os.getenv('BBC_PROJECT_ID')
     # Initialize a BigQuery Client
@@ -26,9 +29,8 @@ def get_bbc_news():
     table=client.get_table(table_ref)
     table.schema
     query = """
-    SELECT category, title
+    SELECT *
     FROM  `bigquery-public-data.bbc_news.fulltext`
-    WHERE category = 'politics'
     ORDER BY title ASC
     """
     dry_run_config = bigquery.QueryJobConfig(dry_run=True)
@@ -43,3 +45,32 @@ def get_bbc_news():
     bbc_news = client.list_rows(table).to_dataframe()
     return bbc_news
 
+def bbc_news_politics(category="politics"):
+    """"
+    This function fetches the BBC News dataset on the political topic from BigQuery and returns it as a DataFrame.
+    """
+    # Setting up the credentials
+    project = os.getenv('BBC_PROJECT_ID')
+    # Initialize a BigQuery Client
+    client = bigquery.Client(project=project)
+    
+    # Construct the SQL query with filtering
+    query = f"""
+    SELECT * 
+    FROM `bigquery-public-data.bbc_news.fulltext`
+    WHERE category = 'politics'
+    ORDER BY title ASC
+    """
+
+    # Dry run to estimate data processed
+    dry_run_config = bigquery.QueryJobConfig(dry_run=True)
+    dry_run_query_job = client.query(query, job_config=dry_run_config)
+    print(f"This query will process {dry_run_query_job.total_bytes_processed} bytes.")
+
+    # Execute query with a safety limit (e.g., 10 GB)
+    safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10) 
+    query_job = client.query(query, job_config=safe_config)
+    
+    # Convert to DataFrame
+    bbc_news_politics = query_job.to_dataframe()
+    return bbc_news_politics
