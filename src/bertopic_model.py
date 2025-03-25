@@ -9,7 +9,6 @@ from hdbscan import HDBSCAN
 from sklearn.feature_extraction.text import CountVectorizer
 from bertopic.vectorizers import ClassTfidfTransformer
 from bertopic.representation import MaximalMarginalRelevance
-from visualization import visualize_topic_keywords, visualize_topic_clusters, visualize_topic_hierarchy, visualize_topic_similarity, save_plot
 from query import bbc_news_politics
 import joblib
 from dotenv import load_dotenv
