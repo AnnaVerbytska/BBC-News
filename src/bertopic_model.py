@@ -61,7 +61,7 @@ print(freq.head(15))
 
 # Save DataFrame as CSV in the data folder
 df.to_csv("../data/news_politics_topics.csv", index=False)
-print("DataFrame saved successfully!")
+print("✅ DataFrame saved successfully!")
 
 # Visualize topic keywords and save as png
 fig1 = topic_model.visualize_barchart(n_words=10)
@@ -75,4 +75,4 @@ pio.write_image(fig4, '../plots/topic_similarity_heatmap.png')
 
 # Save the BERTopic model for future use. Note: it takes a lot of space to upload on GitHub
 # joblib.dump(topic_model, '../models/bertopic_model.pkl')
-# print("Model saved as 'bertopic_model.pkl'")
+# print("✅ Model saved as 'bertopic_model.pkl'")
