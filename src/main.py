@@ -10,6 +10,10 @@ from sklearn.feature_extraction.text import CountVectorizer
 from bertopic.vectorizers import ClassTfidfTransformer
 from bertopic.representation import MaximalMarginalRelevance
 from query import bbc_news_politics
+from preprocessing import clean_text, filter_articles_by_length, summarize_long_articles, drop_columns
+from transformers import pipeline
+import nltk
+nltk.download('punkt_tab')
 import joblib
 from dotenv import load_dotenv
 import sys
@@ -22,9 +26,27 @@ load_dotenv()
 # Fetch data from BigQuery
 df = bbc_news_politics()
 
+
+###################
+# PREPROCESS DATA #
+###################
+
+# Preprocess text data
+df = clean_text(df) # clean from extra spaces, line breaks, and special characters
+df = drop_columns(df, ['filename']) # drop columns from a DataFrame
+df = filter_articles_by_length(df) # filter articles with word length between 150 and 1000
+
+# Initialize BART summarization pipeline
+summarization_pipeline = pipeline("summarization", model="facebook/bart-large-cnn")
+df = summarize_long_articles(df)  # summarize articles longer than 1000 words to prevent model bias and create a new column with the summary
+
+##################
+# TOPIC MODELLING #
+##################
+
 # Pre-compute embeddings
 embedding_model = SentenceTransformer("all-MiniLM-L12-v2")
-embeddings = embedding_model.encode(df['body'], show_progress_bar=False)
+embeddings = embedding_model.encode(df['summary'], show_progress_bar=False)
 
 # Initialize UMAP, HDBSCAN, and BERTopic parameters
 umap_model = UMAP(n_neighbors=10, n_components=5, min_dist=0.0, metric='cosine', random_state=42)
@@ -48,11 +70,12 @@ topic_model = BERTopic(
 )
 
 # Fit the model
-topics, probabilities = topic_model.fit_transform(df['body'], embeddings)
+topics, probabilities = topic_model.fit_transform(df['summary'], embeddings)
 
-# Add a new column filled with topics
+# Add a new column filled with topics and filter out outliers (-1 topics)
 df['topic'] = topics
-print(df.head(5))
+df = df[df["topic"] != -1].reset_index(drop=True)
+df.head(5)
 
 # Print number of topics and keywords
 freq = topic_model.get_topic_info()
