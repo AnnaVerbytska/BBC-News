@@ -10,7 +10,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from bertopic.vectorizers import ClassTfidfTransformer
 from bertopic.representation import MaximalMarginalRelevance
 from query import bbc_news_politics
-from preprocessing import clean_text, filter_articles_by_length, summarize_long_articles, drop_columns
+from preprocessing import clean_text, filter_articles_by_length, summarize_long_articles, summarize_all_topics
 from transformers import pipeline
 import nltk
 nltk.download('punkt_tab')
@@ -33,7 +33,6 @@ df = bbc_news_politics()
 
 # Preprocess text data
 df = clean_text(df) # clean from extra spaces, line breaks, and special characters
-df = drop_columns(df, ['filename']) # drop columns from a DataFrame
 df = filter_articles_by_length(df) # filter articles with word length between 150 and 1000
 
 # Initialize BART summarization pipeline
@@ -85,6 +84,7 @@ print(freq.head(15))
 # Save DataFrame as CSV in the data folder
 df.to_csv("../data/news_politics_topics.csv", index=False)
 print("✅ DataFrame saved successfully!")
+
 
 # Visualize topic keywords and save as png
 fig1 = topic_model.visualize_barchart(n_words=10)
