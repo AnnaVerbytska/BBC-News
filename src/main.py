@@ -10,7 +10,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from bertopic.vectorizers import ClassTfidfTransformer
 from bertopic.representation import MaximalMarginalRelevance
 from query import bbc_news_politics
-from preprocessing import clean_text, filter_articles_by_length, summarize_long_articles, summarize_all_topics
+from preprocessing import clean_text, filter_articles_by_length, summarize_long_articles, drop_columns
 from transformers import pipeline
 import nltk
 nltk.download('punkt_tab')
@@ -33,6 +33,7 @@ df = bbc_news_politics()
 
 # Preprocess text data
 df = clean_text(df) # clean from extra spaces, line breaks, and special characters
+df = drop_columns(df, ['filename']) 
 df = filter_articles_by_length(df) # filter articles with word length between 150 and 1000
 
 # Initialize BART summarization pipeline
@@ -45,7 +46,7 @@ df = summarize_long_articles(df)  # summarize articles longer than 1000 words to
 
 # Pre-compute embeddings
 embedding_model = SentenceTransformer("all-MiniLM-L12-v2")
-embeddings = embedding_model.encode(df['summary'], show_progress_bar=False)
+embeddings = embedding_model.encode(df['body_shorter'], show_progress_bar=False)
 
 # Initialize UMAP, HDBSCAN, and BERTopic parameters
 umap_model = UMAP(n_neighbors=10, n_components=5, min_dist=0.0, metric='cosine', random_state=42)
@@ -69,7 +70,7 @@ topic_model = BERTopic(
 )
 
 # Fit the model
-topics, probabilities = topic_model.fit_transform(df['summary'], embeddings)
+topics, probabilities = topic_model.fit_transform(df['body_shorter'], embeddings)
 
 # Add a new column filled with topics and filter out outliers (-1 topics)
 df['topic'] = topics
@@ -82,7 +83,7 @@ print(f"Number of topics: {len(freq)}")
 print(freq.head(15))
 
 # Save DataFrame as CSV in the data folder
-df.to_csv("../data/news_politics_topics.csv", index=False)
+df.to_csv("../data/topics.csv", index=False)
 print("✅ DataFrame saved successfully!")
 
 
