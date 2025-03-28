@@ -22,10 +22,14 @@ We use **BERTopic** with `all-MiniLM-L12-v2` embeddings from HuggingFace to unco
 ---
 
 ## ⚡ **Quick Setup**
-```bash
-pip install -r requirements.txt
 
-## **Get Topics**
-cd src/
-python main.py 
+    pip install -r requirements.txt
+
+#### **Get Topics**
+
+    cd src/
+    python main.py
+
+---
+
 
