@@ -15,10 +15,10 @@ We use **BERTopic** with `all-MiniLM-L12-v2` embeddings from HuggingFace to unco
 - **Visualization:** Interactive topic visualizations (barcharts, clusters, heatmaps)
 - **Text Summarisation:** `facebook/bart-large-cnn`
             
-            - *Article-Level Summarisaiton:* summarised very long articles to avoid BERTopic bias
+    - *Article-Level Summarisaiton:* summarised very long articles to avoid BERTopic bias
             
-            - *Topic-Level Summarisation:* summarised bunches of articles categories as certain topics to label them. 
-            
+    - *Topic-Level Summarisation:* summarised bunches of articles categories as certain topics to label them. 
+
 - **Named Entity Recognition:** `distilBERT`  
 - **Sentiment Analysis:** Aspect-based sentiment evaluation of political entities where **aspect labels = topic labels**
 
