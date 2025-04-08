@@ -166,3 +166,8 @@ cython_debug/
 .env
 .DS_Store.DS_Store
 .DS_Store
+
+#Temoporary
+models.py
+save_mlflow.py
+start_mlflow.py

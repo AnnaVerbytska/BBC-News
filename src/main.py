@@ -40,13 +40,13 @@ df = filter_articles_by_length(df) # filter articles with word length between 15
 summarization_pipeline = pipeline("summarization", model="facebook/bart-large-cnn")
 df = summarize_long_articles(df)  # summarize articles longer than 1000 words to prevent model bias and create a new column with the summary
 
-##################
+###################
 # TOPIC MODELLING #
-##################
+###################
 
 # Pre-compute embeddings
 embedding_model = SentenceTransformer("all-MiniLM-L12-v2")
-embeddings = embedding_model.encode(df['body_shorter'], show_progress_bar=False)
+embeddings = embedding_model.encode(df['body'], show_progress_bar=False)
 
 # Initialize UMAP, HDBSCAN, and BERTopic parameters
 umap_model = UMAP(n_neighbors=10, n_components=5, min_dist=0.0, metric='cosine', random_state=42)
@@ -70,7 +70,7 @@ topic_model = BERTopic(
 )
 
 # Fit the model
-topics, probabilities = topic_model.fit_transform(df['body_shorter'], embeddings)
+topics, probabilities = topic_model.fit_transform(df['body'], embeddings)
 
 # Add a new column filled with topics and filter out outliers (-1 topics)
 df['topic'] = topics
@@ -87,16 +87,33 @@ df.to_csv("../data/topics.csv", index=False)
 print("✅ DataFrame saved successfully!")
 
 
-# Visualize topic keywords and save as png
+# Visualize topics both as an image and an interactive HTML file
+# 1. Barchart
 fig1 = topic_model.visualize_barchart(n_words=10)
-pio.write_image(fig1, '../plots/topic_keywords_barchart.png')  
+fig1.write_html("../plots/topic_keywords_barchart.html")
+pio.write_image(fig1, "../plots/topic_keywords_barchart.png")
+
+# 2. Topic clusters
 fig2 = topic_model.visualize_topics(title="Topic Clusters Visualization")
-pio.write_image(fig2, '../plots/topic_clusters.png') 
+fig2.write_html("../plots/topic_clusters.html")
+pio.write_image(fig2, "../plots/topic_clusters.png")
+
+# 3. Hierarchy
 fig3 = topic_model.visualize_hierarchy(top_n_topics=11)
-pio.write_image(fig3, '../plots/topic_hierarchy.png') 
+fig3.write_html("../plots/topic_hierarchy.html")
+pio.write_image(fig3, "../plots/topic_hierarchy.png")
+
+# 4. Heatmap
 fig4 = topic_model.visualize_heatmap(top_n_topics=30)
-pio.write_image(fig4, '../plots/topic_similarity_heatmap.png') 
+fig4.write_html("../plots/topic_similarity_heatmap.html")
+pio.write_image(fig4, "../plots/topic_similarity_heatmap.png") 
 
 # Save the BERTopic model for future use. Note: it takes a lot of space to upload on GitHub
 # joblib.dump(topic_model, '../models/bertopic_model.pkl')
 # print("✅ Model saved as 'bertopic_model.pkl'")
+
+
+############################
+# NAMED ENTITY RECOGNITION #
+############################
+
