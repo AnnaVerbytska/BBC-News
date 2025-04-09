@@ -22,7 +22,7 @@ We use **BERTopic** with `all-MiniLM-L12-v2` embeddings from HuggingFace to unco
     - *Topic-Level Summarisation:* summarised bunches of articles belonging to a certain topic and labelled topics with `gemini-2.0-flash`
  
 - **Sentiment Analysis:** Aspect-based sentiment evaluation of political entities where **aspect labels = topic labels** 
-- **Reference dataset**: [![Hugging Face Model](https://img.shields.io/badge/Hugging%20Face-fhamborg/news_sentiment_newsmtsc-brightgreen)](https://huggingface.co/datasets/fhamborg/news_sentiment_newsmtsc)
+- **Reference dataset**: [![Hugging Face Model](https://img.shields.io/badge/Hugging%20Face-fhamborg/news_sentiment_newsmtsc-yellow)](https://huggingface.co/datasets/fhamborg/news_sentiment_newsmtsc)
 - **Sentiment Labels**: Positive, Negative, Neutral
 
 ---
