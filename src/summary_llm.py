@@ -79,5 +79,5 @@ df = summarize_articles_in_df(df)
 df[['body', 'gemini_summary']].head(10)
 
 # Save the updated DataFrame with summaries
-df.to_csv("topics_summaries.csv", index=False)
+df.to_csv("../data/topics_summaries.csv", index=False)
 print("✅ DataFrame with article summaries saved successfully!")
