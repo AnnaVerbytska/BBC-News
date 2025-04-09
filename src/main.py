@@ -109,10 +109,9 @@ pio.write_image(fig4, "../plots/topic_similarity_heatmap.png")
 # print("✅ Model saved as 'bertopic_model.pkl'")
 
 
-#########################################
-# Articel-Level Summarisation with BART #
-#########################################
-
+#######################################
+# Article-Level Summarization by BART #
+#######################################
 df = summarize_articles_bart(df)
 # Save DataFrame as CSV in the data folder
 df.to_csv("../data/topics_summaries.csv", index=False)
