@@ -86,22 +86,18 @@ print(freq.head(15))
 # Visualize topics both as an image and an interactive HTML file
 # 1. Barchart
 fig1 = topic_model.visualize_barchart(n_words=10)
-fig1.write_html("../plots/topic_keywords_barchart.html")
 pio.write_image(fig1, "../plots/topic_keywords_barchart.png")
 
 # 2. Topic clusters
 fig2 = topic_model.visualize_topics(title="Topic Clusters Visualization")
-fig2.write_html("../plots/topic_clusters.html")
 pio.write_image(fig2, "../plots/topic_clusters.png")
 
 # 3. Hierarchy
 fig3 = topic_model.visualize_hierarchy(top_n_topics=11)
-fig3.write_html("../plots/topic_hierarchy.html")
 pio.write_image(fig3, "../plots/topic_hierarchy.png")
 
 # 4. Heatmap
 fig4 = topic_model.visualize_heatmap(top_n_topics=30)
-fig4.write_html("../plots/topic_similarity_heatmap.html")
 pio.write_image(fig4, "../plots/topic_similarity_heatmap.png") 
 
 # Save the BERTopic model for future use. Note: it takes a lot of space to upload on GitHub
