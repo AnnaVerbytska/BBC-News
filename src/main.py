@@ -1,6 +1,6 @@
 # main.py
-import pandas as pd
-import matplotlib.pyplot as plt
+#import pandas as pd
+#import matplotlib.pyplot as plt
 import plotly.io as pio
 from bertopic import BERTopic
 from sentence_transformers import SentenceTransformer
@@ -10,13 +10,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 from bertopic.vectorizers import ClassTfidfTransformer
 from bertopic.representation import MaximalMarginalRelevance
 from query import bbc_news_politics
-from preprocessing import clean_text, filter_articles_by_length, summarize_long_articles, drop_columns
+from preprocessing import clean_text, drop_columns, filter_articles_by_length, summarize_long_articles, summarize_articles_bart
+from tqdm import tqdm
 from transformers import pipeline
 import nltk
 nltk.download('punkt_tab')
-import joblib
+#import joblib
 from dotenv import load_dotenv
-import sys
+#import sys
 import os
 os.environ["TOKENIZERS_PARALLELISM"] = "false" # Fix for Hugging Face Tokenizers issue
 
@@ -32,13 +33,13 @@ df = bbc_news_politics()
 ###################
 
 # Preprocess text data
-df = clean_text(df) # clean from extra spaces, line breaks, and special characters
-df = drop_columns(df, ['filename']) 
-df = filter_articles_by_length(df) # filter articles with word length between 150 and 1000
+df = clean_text(df)  
+df = drop_columns(df)  
+df = filter_articles_by_length(df)  # word length between 150 and 1000
 
 # Initialize BART summarization pipeline
 summarization_pipeline = pipeline("summarization", model="facebook/bart-large-cnn")
-df = summarize_long_articles(df)  # summarize articles longer than 1000 words to prevent model bias and create a new column with the summary
+df = summarize_long_articles(df)  # summarize articles longer than 1000 words to prevent model bias and replace the original with a summary
 
 ###################
 # TOPIC MODELLING #
@@ -82,11 +83,6 @@ freq = topic_model.get_topic_info()
 print(f"Number of topics: {len(freq)}")
 print(freq.head(15))
 
-# Save DataFrame as CSV in the data folder
-df.to_csv("../data/topics.csv", index=False)
-print("✅ DataFrame saved successfully!")
-
-
 # Visualize topics both as an image and an interactive HTML file
 # 1. Barchart
 fig1 = topic_model.visualize_barchart(n_words=10)
@@ -113,7 +109,11 @@ pio.write_image(fig4, "../plots/topic_similarity_heatmap.png")
 # print("✅ Model saved as 'bertopic_model.pkl'")
 
 
-############################
-# NAMED ENTITY RECOGNITION #
-############################
+#########################################
+# Articel-Level Summarisation with BART #
+#########################################
 
+df = summarize_articles_bart(df)
+# Save DataFrame as CSV in the data folder
+df.to_csv("../data/topics_summaries.csv", index=False)
+print("✅ DataFrame with summaries saved successfully!")
