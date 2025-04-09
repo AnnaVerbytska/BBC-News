@@ -1,7 +1,6 @@
 # 📰 Topic Modeling & Aspect-Based Sentiment Analysis of BBC News
 
 ![Python](https://img.shields.io/badge/Python-3.12.6-blue)
-![BERTopic](https://img.shields.io/badge/BERTopic-MiniLM--L12--v2-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 🚀 **Analyzing political news from the BBC using Topic Modeling and Sentiment Analysis.**  
