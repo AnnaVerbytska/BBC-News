@@ -43,6 +43,7 @@ We use **BERTopic** with `all-MiniLM-L12-v2` embeddings from HuggingFace to unco
 #### **Get Named Entities**
 
     pip install -r ner_requirements.txt
-    
+    cd src/
+    python entities.py
 
 
