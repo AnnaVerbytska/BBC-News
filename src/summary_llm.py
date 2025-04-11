@@ -76,7 +76,7 @@ df = pd.read_csv("../data/topics_summaries.csv")
 
 # Summarize the articles in the 'body' column (Run time - mins)
 df = summarize_articles_in_df(df)
-df[['body', 'gemini_summary']].head(10)
+print(df[['body', 'gemini_summary']].head(10))
 
 # Save the updated DataFrame with summaries
 df.to_csv("../data/topics_summaries.csv", index=False)
