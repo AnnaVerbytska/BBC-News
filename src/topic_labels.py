@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from google import genai
-from dotenv import load_dotenv #pip install python-dotenv
+from dotenv import load_dotenv 
 from google.genai import types
 load_dotenv()  # Loads variables from .env
 
@@ -31,15 +31,15 @@ Here are the summaries:
     )
     return response.text.strip()
 
+# Fetch the data 
+df = pd.read_csv("../data/topics_summaries.csv")
+
 # Generate topic labels
 topic_labels = {}
 for topic_id in df['topic'].unique():
-    summaries = "\n".join(df[df['topic'] == topic_id]['gemini_summary'].dropna().tolist()[:20])  # optionally limit to 20
+    summaries = "\n".join(df[df['topic'] == topic_id]['gemini_summary'].dropna().tolist()[:50])  # optionally limit to 50 summaries
     label = generate_topic_label(topic_id, summaries)
     topic_labels[topic_id] = label
-
-# Fetch the data 
-df = pd.read_csv("../data/topics_summaries.csv")
 
 # Map labels to a new column
 df['topic_label'] = df['topic'].map(topic_labels)
