@@ -12,14 +12,13 @@ We use **BERTopic** with `all-MiniLM-L12-v2` embeddings from HuggingFace to unco
 - **Data Source:** BBC News articles from **BigQuery** (`bigquery-public-data`)  
 - **Models Used:** `BERTopic`, `all-MiniLM-L12-v2`, `facebook/bart-large-cnn`, `gemini-2.0-flash`
 - **Visualization:** Interactive topic visualizations (barcharts, clusters, heatmaps)
-- **Text Summarisation:** `facebook/bart-large-cnn`
+- **Text Summarisation:**  
+            - summarised very long articles to avoid BERTopic bias with `facebook/bart-large-cnn`
+            - summarised articles with `facebook/bart-large-cnn` & `gemini-2.0-flash` for comparison
             
-    - *Article-Level Summarisaiton:* 
-                - summarised very long articles to avoid BERTopic bias
-                - sumamrised articles with `facebook/bart-large-cnn` & `gemini-2.0-flash`
-            
-    - *Topic-Level Summarisation:* summarised bunches of articles belonging to a certain topic and labelled topics with `gemini-2.0-flash`
+    - *Topic-Level Summarisation:* labelled topics with `gemini-2.0-flash`
  
+- **Named Entity Recognition** extraction of entities with RoBERTa and spaCy
 - **Sentiment Analysis:** Aspect-based sentiment evaluation of political entities where **aspect labels = topic labels** 
 - **Reference dataset**: [![Hugging Face Model](https://img.shields.io/badge/Hugging%20Face-fhamborg/news_sentiment_newsmtsc-yellow)](https://huggingface.co/datasets/fhamborg/news_sentiment_newsmtsc)
 - **Sentiment Labels**: Positive, Negative, Neutral
@@ -40,4 +39,10 @@ We use **BERTopic** with `all-MiniLM-L12-v2` embeddings from HuggingFace to unco
 #### **Get Summaries by Gemini**
     cd src/
     python summary_llm.py
+
+#### **Get Named Entities**
+
+    pip install -r ner_requirements.txt
+    
+
 
